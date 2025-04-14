@@ -1,0 +1,14 @@
+[project]
+name = "secretary"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "python-dotenv>=1.1.0",
+    "redis>=5.2.1",
+    "truthbrush",
+]
+
+[tool.uv.sources]
+truthbrush = { git = "https://github.com/stanfordio/truthbrush.git" }
