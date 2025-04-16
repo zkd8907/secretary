@@ -1,0 +1,27 @@
+name: Create Version Tag
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ssh-key: ${{ secrets.SSH_DEPLOY_KEY }}
+
+      - name: Conventional Changelog Action
+        uses: TriPSs/conventional-changelog-action@v5
+        with:
+          github-token: ""
+          preset: "angular"
+          tag-prefix: "v"
+          skip-version-file: "true"
+          skip-commit: "true"
+          skip-tag: "false"
+          release-count: 1
