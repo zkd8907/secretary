@@ -1,4 +1,0 @@
-commit message格式必须为Header、Body和Footer三部分组成，其中Body和Footer为非必要部分。
-Header使用angular commit message规范来编写提交信息，支持的类型仅限：feat、fix、docs、style、refactor、perf、test、ci、chore，在类型后用简要的描述说明本次提交的目的，Body部分可以详细描述本次提交的内容，Footer部分可以用于关联issue等信息。
-总是使用中文，除非某些文件名、变量或者特定的英文专用词以及其它必需使用英文的地方。
-一次Commit Message只会有一个Header，Body和Footer部分可以有多个段落。
