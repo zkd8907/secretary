@@ -5,7 +5,8 @@ WORKDIR /app
 RUN apk add --no-cache \
     git \
     dcron \
-    curl
+    curl \
+    bash
 
 COPY . /app/
 RUN chmod +x /app/run.sh
