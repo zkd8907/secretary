@@ -1,17 +1,18 @@
+from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 from truthbrush.api import Api
-
+from modules.socialmedia.post import Post
 from utils.redisClient import redis_client
 
 api = Api()
 
 
-def fetch(user_id: str):
-    last_post_id = None
+def fetch(user_id: str) -> list[Post]:
     last_post_id = redis_client.get(f"truthsocial:{user_id}:last_post_id")
-    last_post_id = str(last_post_id, encoding='utf-8')
     if last_post_id is None:
         last_post_id = '114344562778183288'
+    else:
+        last_post_id = str(last_post_id, encoding='utf-8')
 
     posts = list(api.pull_statuses(username=user_id, since_id=last_post_id))
 
@@ -20,7 +21,12 @@ def fetch(user_id: str):
         content = BeautifulSoup(post['content'], 'html.parser').get_text()
         if len(content) > 0:
             post['content'] = content
-            noneEmptyPosts.append(post)
+            post_time = datetime.strptime(
+                post['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
+            post_time = post_time + timedelta(hours=8)
+
+            noneEmptyPosts.append(
+                Post(post['id'], post_time, content))
 
         if post['id'] > last_post_id:
             last_post_id = post['id']
