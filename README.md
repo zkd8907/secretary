@@ -2,7 +2,7 @@
 
 ## 项目简介
 
-Secretary 是一个自动化的社交媒体分析工具，专门用于监控和分析社交媒体平台上的内容，并通过 AI 进行智能分析。该工具能够自动抓取指定账号的最新发言，根据配置的分析提示词进行内容分析，并将分析结果通过企业微信机器人推送给指定用户。通过灵活配置分析提示词，可以针对不同主题（如财经、政治、科技等）进行定制化分析。
+Secretary 是一个自动化的社交媒体分析工具，专门用于监控和分析社交媒体平台上的内容，并通过 AI 进行智能分析。该工具能够自动抓取指定账号的最新发言，根据配置的分析提示词进行内容分析，并将分析结果通过企业微信机器人、个人微信号推送给指定用户。通过灵活配置分析提示词，可以针对不同主题（如财经、政治、科技等）进行定制化分析。
 
 ## 主要功能
 
@@ -16,6 +16,7 @@ Secretary 是一个自动化的社交媒体分析工具，专门用于监控和�
   - 科技分析（技术趋势、创新影响等）
   - 其他自定义分析维度
 - 支持多个企业微信机器人，可以为不同账号配置不同的推送目标
+- 支持推送消息到基于 [Gewechat](https://github.com/Devo919/Gewechat) 部署的个人微信号服务器
 - 支持调试模式，方便开发和测试
 
 ## 安装说明
@@ -64,6 +65,12 @@ HUNYUAN_API_BASE=https://api.hunyuan.cloud.tencent.com/v1
 # 企业微信机器人配置（可配置多个）
 WECOM_TRUMP_ROBOT_ID=your_wecom_robot_id_1
 WECOM_FINANCE_ROBOT_ID=your_wecom_robot_id_2
+
+# 个人微信号配置
+WECHAT_ROBOT_IP=your_wechat_robot_ip
+WECHAT_ROBOT_TOKEN=your_wechat_robot_token
+WECHAT_ROBOT_APP_ID=your_wechat_robot_app_id
+WECHAT_ROBOT_CHATROOM_ID=your_wechat_robot_chatroom_id
 
 # 调试模式（可选）
 DEBUG=1
@@ -132,7 +139,12 @@ social_networks:
 - `HUNYUAN_API_KEY`: 腾讯混元大模型的 API 密钥
 - `HUNYUAN_API_BASE`: 腾讯混元大模型的 API 基础地址
 - `WECOM_*_ROBOT_ID`: 企业微信机器人的 ID，可以配置多个
+- `WECHAT_REBOT_IP`: 个人微信部署服务器 IP/域名
+- `WECHAT_REBOT_TOKEN`: 个人微信 Gewechat 会话 Token
+- `WECHAT_REBOT_APP_ID`: 个人微信部署设备唯一 ID
+- `WECHAT_REBOT_CHATROOM_ID`: 个人微信群聊 ID，也可以为好友 ID
 - `DEBUG`: 调试模式开关，设置为 1 时启用调试模式
+
 
 ## 使用方法
 
@@ -146,7 +158,7 @@ python main.py
 - 抓取配置的社交媒体账号的最新发言
 - 根据每个账号配置的提示词进行 AI 分析和翻译
 - 生成分析报告
-- 通过配置的企业微信机器人推送分析结果
+- 通过配置的企业微信机器人、个人微信推送分析结果
 
 ## 输出格式
 
@@ -160,10 +172,10 @@ python main.py
 ## 注意事项
 
 - 确保网络连接正常
-- 企业微信机器人需要正确配置
+- 企业微信机器人、个人微信需要正确配置，未配置则不会发送
 - 建议使用 Python 3.11 或更高版本
 - 需要有效的企业微信机器人 ID
-- 调试模式下，消息将直接打印到控制台而不会发送到企业微信
+- 调试模式下，消息将直接打印到控制台而不会发送
 - 每个监控账号可以配置不同的分析提示词和推送目标
 - 提示词配置决定了分析的主题和维度，可以根据需求灵活调整
 - Twitter登录后会生成会话文件（*.tw_session），该文件已被添加到.gitignore中，不会被提交到代码仓库
