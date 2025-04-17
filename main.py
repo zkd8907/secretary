@@ -37,6 +37,11 @@ EFFECTS = {
 
 def main():
     posts = fetchTruthsocial("realDonaldTrump")
+
+    if len(posts) == 0:
+        print("No posts found")
+        return
+
     for post in posts:
         content = post['content']
         prompt = PROMPT.format(content=content)

@@ -1,0 +1,7 @@
+version: "3"
+services:
+  secretary:
+    image: zkd8907/secretary:dev
+    env_file:
+      - .env
+    restart: always
