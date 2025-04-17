@@ -1,14 +1,11 @@
-FROM python:3.11.11-slim
+FROM ghcr.io/astral-sh/uv:python3.11-alpine
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
+RUN apk add --no-cache \
     git \
-    cron \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+    dcron \
+    curl
 
 COPY . /app/
 RUN chmod +x /app/run.sh
@@ -19,4 +16,4 @@ RUN echo "*/1 * * * * /app/run.sh >> /var/log/cron.log 2>&1" > /etc/cron.d/secre
 RUN touch /var/log/cron.log
 RUN chmod 0644 /etc/cron.d/secretary-cron
 
-CMD cron && tail -f /var/log/cron.log
+CMD crond -f -l 8 && tail -f /var/log/cron.log
