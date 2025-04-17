@@ -9,10 +9,10 @@ social_networks:
       这是你需要分析的内容：{content}
 
       这是输出格式的说明：
-      {
+      {{
           "is_relevant": "是否与财经相关，只需要返回1或0这两个值之一即可",
           "analytical_briefing": "分析简报"
-      }
+      }}
 
       其中analytical_briefing的值是一个字符串，它是针对内容所做的分析简报，仅在is_relevant为1时会返回这个值。
 

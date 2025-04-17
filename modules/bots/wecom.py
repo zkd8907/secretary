@@ -2,7 +2,7 @@ import requests
 import os
 
 
-def send_markdown_msg(message: str, robot_id: str):
+def send_wecom_msg(message: str, robot_id: str):
     if os.getenv('DEBUG') == '1' or len(robot_id) == 0:
         print(message)
         return
