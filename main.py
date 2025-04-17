@@ -55,12 +55,14 @@ def main():
             effects.append(
                 f"{effect}: {EFFECTS[format_result['effects'][effect]]}")
 
-        effects = "\n".join(effects)
-
         post_time = datetime.datetime.strptime(
             post['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
         post_time = post_time + datetime.timedelta(hours=8)
         post_time = post_time.strftime('%Y-%m-%d %H:%M:%S')
+
+        if len(effects) == 0:
+            print(f"No effects found for {post_time}: {content}")
+            continue
 
         markdown_msg = f"""# {post_time}
 
