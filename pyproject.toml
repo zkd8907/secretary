@@ -10,6 +10,7 @@ dependencies = [
     "python-dotenv>=1.1.0",
     "redis>=5.2.1",
     "truthbrush",
+    "tweety-ns>=2.2",
 ]
 
 [tool.uv.sources]
