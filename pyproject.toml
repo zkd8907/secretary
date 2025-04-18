@@ -1,17 +1,25 @@
 [project]
 name = "secretary"
 version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
-requires-python = ">=3.11"
-dependencies = [
-    "bs4>=0.0.2",
-    "langchain-openai>=0.3.13",
-    "python-dotenv>=1.1.0",
-    "redis>=5.2.1",
-    "truthbrush",
-    "tweety-ns>=2.2",
+description = "社交媒体内容分析助手"
+authors = [
+    {name = "Bpbby", email = "zkd8907@live.com"},
 ]
+dependencies = [
+    "python-dotenv",
+    "redis",
+    "requests",
+    "beautifulsoup4",
+    "tweety-ns",
+    "truthbrush",
+    "langchain-openai",
+    "pytz",
+]
+requires-python = ">=3.11"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.uv.sources]
 truthbrush = { git = "https://github.com/stanfordio/truthbrush.git" }

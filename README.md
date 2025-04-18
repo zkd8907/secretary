@@ -77,8 +77,6 @@ social_networks:
     socialNetworkId: realDonaldTrump
     prompt: >-
       你现在是一名财经专家，请对以下美国总统的发言进行分析，并给按我指定的格式返回分析结果。
-      输出格式为原始合法的json字符串，字符串中如果有一些特殊的字符需要做好转义，确保最终这个json字符串可以在python中被正确解析。
-      在最终输出的内容中除了json字符串本身，不需要其它额外的信息，也不要在json内容前后额外增加markdown的三个点转义。
 
       这是你需要分析的内容：{content}
 
