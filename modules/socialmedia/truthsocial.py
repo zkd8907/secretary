@@ -14,8 +14,6 @@ def fetch(user_id: str) -> list[Post]:
     else:
         last_post_id = str(last_post_id, encoding='utf-8')
 
-    last_post_id = '114344562778183288'
-
     posts = list(api.pull_statuses(username=user_id, since_id=last_post_id))
 
     noneEmptyPosts = []
