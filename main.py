@@ -54,12 +54,14 @@ def main():
                     print(f"翻译内容: {translated}")
                     format_result = None
 
+            post_time = post.post_on
+
             if format_result['is_relevant'] == '0':
                 print(
-                    f"在 {post.post_on.strftime('%Y-%m-%d %H:%M:%S')} 未发现相关内容: {content}")
+                    f"在 {post_time.strftime('%Y-%m-%d %H:%M:%S')} 未发现相关内容: {content}")
                 continue
 
-            markdown_msg = f"""# {post.post_on.strftime('%Y-%m-%d %H:%M:%S')}
+            markdown_msg = f"""# {post_time.strftime('%Y-%m-%d %H:%M:%S')}
 
 {format_result['analytical_briefing']}
 """

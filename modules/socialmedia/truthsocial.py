@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from bs4 import BeautifulSoup
 from truthbrush.api import Api
 from modules.socialmedia.post import Post
@@ -23,7 +23,6 @@ def fetch(user_id: str) -> list[Post]:
             post['content'] = content
             post_time = datetime.strptime(
                 post['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
-            post_time = post_time + timedelta(hours=8)
 
             noneEmptyPosts.append(
                 Post(post['id'], post_time, content))
