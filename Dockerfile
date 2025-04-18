@@ -17,4 +17,4 @@ RUN echo "*/5 * * * * /app/run.sh >> /var/log/cron.log 2>&1" > /etc/cron.d/secre
 RUN touch /var/log/cron.log
 RUN chmod 0644 /etc/cron.d/secretary-cron
 
-CMD crond -f -l 8 && tail -f /var/log/cron.log
+CMD crond -f -l 8 & tail -f /var/log/cron.log | tee /dev/stdout
