@@ -35,7 +35,8 @@ def main():
             posts = fetchTwitter(account['socialNetworkId'])
 
         if len(posts) == 0:
-            print(f"未找到 {account['type']}: {account['socialNetworkId']} 的帖子")
+            print(
+                f"未找到 {account['type']}: {account['socialNetworkId']} 有更新发布的内容")
             continue
 
         for post in posts:

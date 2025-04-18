@@ -6,6 +6,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+twitter_session = os.getenv('TWITTER_SESSION')
+if twitter_session and twitter_session.strip():
+    with open('session.tw_session', 'w') as f:
+        f.write(twitter_session)
 
 app = Twitter('session')
 app.connect()
