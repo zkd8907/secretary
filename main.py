@@ -4,7 +4,7 @@ import sys
 from modules.socialmedia.truthsocial import fetch as fetchTruthsocial
 from modules.socialmedia.twitter import fetch as fetchTwitter
 from modules.langchain.hunyuan import get_hunyuan_response
-from modules.bots.wecom import send_wecom_msg
+from modules.bots.wecom import send_markdown_msg
 from modules.bots.wechat import send_wechat_msg
 from dotenv import load_dotenv
 import os
@@ -94,7 +94,7 @@ def main():
 
 origin: [{post.url}]({post.url})"""
 
-            send_wecom_msg(
+            send_markdown_msg(
                 markdown_msg,
                 os.getenv(account['weComRobotEnvName'], '')
             )
