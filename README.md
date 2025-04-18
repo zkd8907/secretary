@@ -106,6 +106,7 @@ social_networks:
 
       这部分需要用非常简明扼要的文字对分析结果进行总结，以及解释为什么在上面针对不同选项会得出不同的结论。
       ```
+    footer: 可选，附加在发送正文底部的固定的额外信息
     weComRobotEnvName: WECOM_TRUMP_ROBOT_ID
   - type: twitter
     socialNetworkId: myfxtrader

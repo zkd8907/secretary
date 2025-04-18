@@ -63,8 +63,10 @@ def main():
 
             markdown_msg = f"""# {post_time.strftime('%Y-%m-%d %H:%M:%S')}
 
-{format_result['analytical_briefing']}
-"""
+{format_result['analytical_briefing']}"""
+
+            if 'footer' in account and len(account['footer']) > 0:
+                markdown_msg += f'\n\n{account['footer']}'
 
             send_markdown_msg(
                 markdown_msg,
