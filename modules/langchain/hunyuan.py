@@ -1,5 +1,5 @@
 from langchain_openai import ChatOpenAI
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 from dotenv import load_dotenv
 import os
 
@@ -25,7 +25,15 @@ def get_hunyuan_response(prompt: str) -> str:
     )
 
     # 创建消息
-    messages = [HumanMessage(content=prompt)]
+    messages = [
+        SystemMessage(
+            content="""
+你接下来回答的所有内容都只能是符合我要求的json字符串同。
+字符串中如果有一些特殊的字符需要做好转义，确保最终这个json字符串可以在python中被正确解析。
+在最终的回答中除了json字符串本身，不需要其它额外的信息，也不要在json内容前后额外增加markdown的三个点转义。
+"""),
+        HumanMessage(content=prompt)
+    ]
 
     # 获取响应
     response = chat.invoke(messages)

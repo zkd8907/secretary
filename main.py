@@ -62,18 +62,23 @@ def main():
             content = post.content
             prompt = account['prompt'].format(content=content)
             format_result = None
+            rawData = ''
 
             # 在某些情况下，LLM会返回一些非法的json字符串，所以这里需要循环尝试，直到解析成功为止
             while format_result is None:
-                translated = get_hunyuan_response(prompt).replace('\n', '\\n')
+                if len(rawData) > 0:
+                    prompt += """
+你前次基于上面的内容提供给我的json是{rawData}，然而这个json内容有语法错误，无法在python中被解析。针对这个问题重新检查我的要求，按指定要求和格式回答。
+"""
+                rawData = get_hunyuan_response(prompt).replace('\n', '\\n')
                 try:
-                    format_result = json.loads(translated)
+                    format_result = json.loads(rawData)
                 except Exception as e:
                     print(f"解析 JSON 时出错: {e}")
-                    print(f"翻译内容: {translated}")
+                    print(f"翻译内容: {rawData}")
                     format_result = None
 
-            post_time = post.post_on
+            post_time = post.get_local_time()
 
             if format_result['is_relevant'] == '0':
                 print(
