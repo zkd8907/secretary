@@ -39,6 +39,8 @@ def fetch(user_id: str) -> list[Post]:
             latest_id = None
             latest_created_on = None
             combined_text = ""
+            latest_url = ""
+            poster = None
 
             for tweet in post.tweets:
                 if tweet.text:
@@ -46,12 +48,15 @@ def fetch(user_id: str) -> list[Post]:
                 if latest_created_on is None or tweet.created_on > latest_created_on:
                     latest_created_on = tweet.created_on
                     latest_id = tweet.id
+                    latest_url = tweet.url
+                    poster = tweet.author
 
-            if combined_text and latest_id and latest_created_on:
+            if combined_text and latest_id and latest_created_on and poster:
                 noneEmptyPosts.append(
-                    Post(latest_id, latest_created_on, combined_text.strip()))
+                    Post(latest_id, latest_created_on, combined_text.strip(), latest_url, poster.name, poster.profile_url))
         elif post.text:
-            noneEmptyPosts.append(Post(post.id, post.created_on, post.text))
+            noneEmptyPosts.append(Post(post.id, post.created_on, post.text,
+                                  post.url, post.author.name, post.author.profile_url))
 
     redis_client.set(f"twitter:{user_id}:last_post_id", posts.cursor_top)
 

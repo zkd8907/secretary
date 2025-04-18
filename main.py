@@ -27,6 +27,25 @@ def load_config():
 def main():
     config = load_config()
 
+    # 处理socialNetworkId为数组的情况
+    new_social_networks = []
+    for account in config['social_networks']:
+        if isinstance(account['socialNetworkId'], list):
+            # 如果socialNetworkId是数组,为每个ID创建一个新的配置
+            for social_id in account['socialNetworkId']:
+                if len(social_id) == 0:
+                    continue
+
+                new_account = account.copy()
+                new_account['socialNetworkId'] = social_id
+                new_social_networks.append(new_account)
+        else:
+            # 如果不是数组直接添加原配置
+            new_social_networks.append(account)
+
+    # 用新的配置替换原配置
+    config['social_networks'] = new_social_networks
+
     for account in config['social_networks']:
         posts = []
         if account['type'] == 'truthsocial':
@@ -46,10 +65,9 @@ def main():
 
             # 在某些情况下，LLM会返回一些非法的json字符串，所以这里需要循环尝试，直到解析成功为止
             while format_result is None:
-                translated = get_hunyuan_response(prompt)
+                translated = get_hunyuan_response(prompt).replace('\n', '\\n')
                 try:
-                    format_result = json.loads(
-                        translated.replace('\n', '\\n'))
+                    format_result = json.loads(translated)
                 except Exception as e:
                     print(f"解析 JSON 时出错: {e}")
                     print(f"翻译内容: {translated}")
@@ -62,12 +80,13 @@ def main():
                     f"在 {post_time.strftime('%Y-%m-%d %H:%M:%S')} 未发现相关内容: {content}")
                 continue
 
-            markdown_msg = f"""# {post_time.strftime('%Y-%m-%d %H:%M:%S')}
+            markdown_msg = f"""# [{post.poster_name}]({post.poster_url}) {post_time.strftime('%Y-%m-%d %H:%M:%S')}
 
-{format_result['analytical_briefing']}"""
 
-            if 'footer' in account and len(account['footer']) > 0:
-                markdown_msg += f"\n\n{account['footer']}"
+{format_result['analytical_briefing']}
+
+
+origin: [{post.url}]({post.url})"""
 
             send_markdown_msg(
                 markdown_msg,
