@@ -13,7 +13,7 @@ RUN chmod +x /app/run.sh
 WORKDIR /app
 RUN uv sync
 
-RUN echo "*/1 * * * * /app/run.sh >> /var/log/cron.log 2>&1" > /etc/cron.d/secretary-cron
+RUN echo "*/5 * * * * /app/run.sh >> /var/log/cron.log 2>&1" > /etc/cron.d/secretary-cron
 RUN touch /var/log/cron.log
 RUN chmod 0644 /etc/cron.d/secretary-cron
 
