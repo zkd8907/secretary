@@ -55,7 +55,7 @@ def main():
 
         if len(posts) == 0:
             print(
-                f"未找到 {account['type']}: {account['socialNetworkId']} 有更新发布的内容")
+                f"在 {account['type']}: {account['socialNetworkId']} 上未发现有更新的内容")
             continue
 
         for post in posts:
@@ -82,7 +82,7 @@ def main():
 
             if format_result['is_relevant'] == '0':
                 print(
-                    f"在 {post_time.strftime('%Y-%m-%d %H:%M:%S')} 未发现相关内容: {content}")
+                    f"在 {account['type']}: {account['socialNetworkId']} 上发现有更新的内容，但内容与需要关注的主题无关: {content}")
                 continue
 
             markdown_msg = f"""# [{post.poster_name}]({post.poster_url}) {post_time.strftime('%Y-%m-%d %H:%M:%S')}
