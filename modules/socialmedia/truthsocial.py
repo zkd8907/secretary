@@ -25,7 +25,7 @@ def fetch(user_id: str) -> list[Post]:
                 post['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
 
             noneEmptyPosts.append(
-                Post(post['id'], post_time, content))
+                Post(post['id'], post_time, content, post['url'], post['account']['display_name'], post['account']['url']))
 
         if post['id'] > last_post_id:
             last_post_id = post['id']

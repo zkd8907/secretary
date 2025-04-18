@@ -3,7 +3,10 @@ import os
 
 
 def send_markdown_msg(message: str, robot_id: str):
-    if os.getenv('DEBUG') == '1' or len(robot_id) == 0:
+    if os.getenv('DEBUG') == '1' and len(os.getenv('DEBUG_ROBOT_ID', '')) > 0:
+        robot_id = os.getenv('DEBUG_ROBOT_ID')
+
+    if len(robot_id) == 0:
         print(message)
         return
 
