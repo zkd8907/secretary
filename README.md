@@ -54,7 +54,8 @@ REDIS_URL=redis://your_redis_url
 TRUTHSOCIAL_TOKEN=your_truthsocial_token
 
 # Twitter 配置
-TWITTER_TOKEN=your_twitter_token
+TWITTER_USERNAME=your_twitter_username
+TWITTER_PASSWORD=your_twitter_password
 
 # 腾讯混元大模型配置
 HUNYUAN_API_KEY=your_hunyuan_api_key
@@ -123,7 +124,8 @@ social_networks:
 环境变量说明：
 - `REDIS_URL`: Redis 数据库连接地址，用于数据缓存
 - `TRUTHSOCIAL_TOKEN`: Truth Social 平台的访问令牌
-- `TWITTER_TOKEN`: Twitter 平台的访问令牌
+- `TWITTER_USERNAME`: Twitter 平台的用户名
+- `TWITTER_PASSWORD`: Twitter 平台的密码
 - `HUNYUAN_API_KEY`: 腾讯混元大模型的 API 密钥
 - `HUNYUAN_API_BASE`: 腾讯混元大模型的 API 基础地址
 - `WECOM_*_ROBOT_ID`: 企业微信机器人的 ID，可以配置多个
@@ -161,6 +163,7 @@ python main.py
 - 调试模式下，消息将直接打印到控制台而不会发送到企业微信
 - 每个监控账号可以配置不同的分析提示词和推送目标
 - 提示词配置决定了分析的主题和维度，可以根据需求灵活调整
+- Twitter登录后会生成会话文件（*.tw_session），该文件已被添加到.gitignore中，不会被提交到代码仓库
 
 ## 许可证
 
