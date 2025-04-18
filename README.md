@@ -139,10 +139,10 @@ social_networks:
 - `HUNYUAN_API_KEY`: 腾讯混元大模型的 API 密钥
 - `HUNYUAN_API_BASE`: 腾讯混元大模型的 API 基础地址
 - `WECOM_*_ROBOT_ID`: 企业微信机器人的 ID，可以配置多个
-- `WECHAT_REBOT_IP`: 个人微信部署服务器 IP/域名
-- `WECHAT_REBOT_TOKEN`: 个人微信 Gewechat 会话 Token
-- `WECHAT_REBOT_APP_ID`: 个人微信部署设备唯一 ID
-- `WECHAT_REBOT_CHATROOM_ID`: 个人微信群聊 ID，也可以为好友 ID
+- `WECHAT_ROBOT_IP`: 个人微信部署服务器 IP/域名
+- `WECHAT_ROBOT_TOKEN`: 个人微信 Gewechat 会话 Token
+- `WECHAT_ROBOT_APP_ID`: 个人微信部署设备唯一 ID
+- `WECHAT_ROBOT_CHATROOM_ID`: 个人微信群聊 ID，也可以为好友 ID
 - `DEBUG`: 调试模式开关，设置为 1 时启用调试模式
 
 

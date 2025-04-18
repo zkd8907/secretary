@@ -99,13 +99,13 @@ origin: [{post.url}]({post.url})"""
                 os.getenv(account['weComRobotEnvName'], '')
             )
 
-            if (account['sendToWeChat'] == True):
+            if ('sendToWeChat' in account and account['sendToWeChat'] == True):
                 send_wechat_msg(
                     markdown_msg,
-                    os.getenv("WECHAT_BOT_IP", ''),
-                    os.getenv("WECHAT_BOT_TOKEN", ''),
-                    os.getenv("WECHAT_BOT_APP_ID", ''),
-                    os.getenv("WECHAT_BOT_CHATROOM_ID", '')
+                    os.getenv("WECHAT_ROBOT_IP", ''),
+                    os.getenv("WECHAT_ROBOT_TOKEN", ''),
+                    os.getenv("WECHAT_ROBOT_APP_ID", ''),
+                    os.getenv("WECHAT_ROBOT_CHATROOM_ID", '')
                 )
 
 
