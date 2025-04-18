@@ -127,6 +127,7 @@ social_networks:
 - `TRUTHSOCIAL_TOKEN`: Truth Social 平台的访问令牌
 - `TWITTER_USERNAME`: Twitter 平台的用户名
 - `TWITTER_PASSWORD`: Twitter 平台的密码
+- `TWITTER_SESSION`: 之前登录过的 Twitter 平台的登录票据
 - `HUNYUAN_API_KEY`: 腾讯混元大模型的 API 密钥
 - `HUNYUAN_API_BASE`: 腾讯混元大模型的 API 基础地址
 - `WECOM_*_ROBOT_ID`: 企业微信机器人的 ID，可以配置多个
