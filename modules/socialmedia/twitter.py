@@ -2,9 +2,16 @@ import os
 from tweety import Twitter
 from utils.redisClient import redis_client
 from modules.socialmedia.post import Post
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 app = Twitter('session')
-app.start(os.getenv('TWITTER_USERNAME'), os.getenv('TWITTER_PASSWORD'))
+app.connect()
+
+if (app.me is None):
+    app.sign_in(os.getenv('TWITTER_USERNAME'), os.getenv('TWITTER_PASSWORD'))
 
 
 def fetch(user_id: str) -> list[Post]:
