@@ -66,7 +66,7 @@ def main():
 {format_result['analytical_briefing']}"""
 
             if 'footer' in account and len(account['footer']) > 0:
-                markdown_msg += f'\n\n{account['footer']}'
+                markdown_msg += f"\n\n{account['footer']}"
 
             send_markdown_msg(
                 markdown_msg,
