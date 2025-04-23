@@ -1,11 +1,10 @@
 import json
-import yaml
-import sys
 from modules.socialmedia.truthsocial import fetch as fetchTruthsocial
 from modules.socialmedia.twitter import fetch as fetchTwitter
 from modules.langchain.hunyuan import get_hunyuan_response
 from modules.bots.wecom import send_markdown_msg
 from modules.bots.wechat import send_wechat_msg
+from utils.yaml import load_config_with_env
 from dotenv import load_dotenv
 import os
 
@@ -18,21 +17,8 @@ except (ValueError, TypeError):
     LLM_PROCESS_MAX_RETRIED = 3
 
 
-def load_config():
-    config_path = 'config/social-networks.yml'
-    try:
-        with open(config_path, 'r', encoding='utf-8') as f:
-            return yaml.safe_load(f)
-    except FileNotFoundError:
-        print(f"错误：配置文件 {config_path} 不存在")
-        sys.exit(1)
-    except yaml.YAMLError as e:
-        print(f"错误：配置文件格式不正确: {e}")
-        sys.exit(1)
-
-
 def main():
-    config = load_config()
+    config = load_config_with_env('config/social-networks.yml')
 
     # 处理socialNetworkId为数组的情况
     new_social_networks = []
@@ -109,7 +95,7 @@ origin: [{post.url}]({post.url})"""
 
             send_markdown_msg(
                 markdown_msg,
-                os.getenv(account['weComRobotEnvName'], '')
+                account['weComRobotId']
             )
 
             if ('sendToWeChat' in account and account['sendToWeChat'] == True):
