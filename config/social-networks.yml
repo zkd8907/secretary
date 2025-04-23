@@ -14,34 +14,25 @@ social_networks:
 
       其中analytical_briefing的值是一个字符串，它是针对内容所做的分析简报，仅在is_relevant为1时会返回这个值。
 
-      analytical_briefing的内容是markdown格式的，它需要符合下面的规范
+      analytical_briefing的内容是markdown格式的，它需要符合下面的规范：
 
-      ```markdown
-      原始正文，仅当需要分析的内容为英文时，这部分内容才会保留，否则这部分的内容为原始的正文
+      原始正文
 
-
-      翻译后的内容，仅当需要分析的内容为英文时，才会有这部分的内容。
-
+      翻译为中文后的内容，仅当需要分析的内容为英文时，才会有这部分的内容。
 
       ## Brief Analysis
-
 
       分析结果。这部分会展示一个列表，列表中分别包含美股市场、美债市场、科技股、半导体股、中国股票市场、香港股票市场、人民币兑美元汇率、中美关系这8个选项。
       每个选项的值为分别为📈利多和📉利空。如果分析内容对于该选项没有影响，就不要针对这个选项返回任何内容。
 
-
       ## Summarize
 
-
       这部分需要用非常简明扼要的文字对分析结果进行总结，以及解释为什么在上面针对不同选项会得出不同的结论。
-      ```
     weComRobotEnvName: WECOM_TRUMP_ROBOT_ID
     sendToWeChat: true
   - type: twitter
     socialNetworkId: 
       - myfxtrader
-      - zaobaosg
-      - business
       - HAOHONG_CFA
     prompt: >-
       你现在是一名财经专家，请对以下财经博主的发言进行分析，并给按我指定的格式返回分析结果。
@@ -58,29 +49,30 @@ social_networks:
 
       analytical_briefing的内容是markdown格式的，它需要符合下面的规范
 
-      ```markdown
-      原始正文，仅当需要分析的内容为英文时，这部分内容才会保留，否则这部分的内容为原始的正文
-
+      原始正文，仅当需要分析的内容不是为中文时，这部分内容才会保留，否则这部分的内容为原始的正文
 
       翻译后的内容，仅当需要分析的内容为英文时，才会有这部分的内容。
 
-
       ## Brief Analysis
-
 
       分析结果。这部分会展示一个列表，列表中分别包含美股市场、美债市场、科技股、半导体股、中国股票市场、香港股票市场、人民币兑美元汇率、中美关系这8个选项。
       每个选项的值为分别为📈利多和📉利空。如果分析内容对于该选项没有影响，就不要针对这个选项返回任何内容。
 
-
       ## Summarize
 
-
-      这部分需要用非常简明扼要的文字对分析结果进行总结，以及解释为什么在上面针对不同选项会得出不同的结论。```
+      这部分需要用非常简明扼要的文字对分析结果进行总结，以及解释为什么在上面针对不同选项会得出不同的结论。
     weComRobotEnvName: WECOM_FINANCE_ROBOT_ID
   - type: twitter
     socialNetworkId: 
       - dotey
       - imxiaohu
+      - AndrewYNg
+      - drfeifei
+      - sama
+      - karpathy
+      - fchollet
+      - ClementDelangue
+      - fi56622380
     prompt: >-
       你现在是一名大模型领域专家，请对以下社交媒体博主的发言进行分析，并给按我指定的格式返回分析结果。
 
@@ -96,15 +88,11 @@ social_networks:
 
       analytical_briefing的内容是markdown格式的，它需要符合下面的规范
 
-      ```markdown
-      原始正文，仅当需要分析的内容为英文时，这部分内容才会保留，否则这部分的内容为原始的正文
-
+      原始正文，仅当需要分析的内容不是为中文时，这部分内容才会保留，否则这部分的内容为原始的正文
 
       翻译后的内容，仅当需要分析的内容为英文时，才会有这部分的内容。
 
-
       ## Summarize
 
-
-      这部分需要用非常简明扼要的文字对博主发表的内容进行总结。```
+      这部分需要用非常简明扼要的文字对博主发表的内容进行总结。
     weComRobotEnvName: WECOM_AI_ROBOT_ID
