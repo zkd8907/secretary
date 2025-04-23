@@ -114,7 +114,8 @@ social_networks:
 
       这部分需要用非常简明扼要的文字对分析结果进行总结，以及解释为什么在上面针对不同选项会得出不同的结论。
       ```
-    weComRobotEnvName: WECOM_TRUMP_ROBOT_ID
+    weComRobotId: $WECOM_TRUMP_ROBOT_ID
+    sendToWeChat: true
   - type: twitter
     socialNetworkId: 
       - myfxtrader
@@ -124,12 +125,14 @@ social_networks:
     prompt: >-
       你现在是一名财经专家，请对以下财经博主的发言进行分析，并给按我指定的格式返回分析结果。
       # ... 其他配置与上面类似 ...
-    weComRobotEnvName: WECOM_FINANCE_ROBOT_ID
+    weComRobotId: $WECOM_FINANCE_ROBOT_ID
 ```
 
-> ⚠️ **重要提示**：在配置 prompt 时，必须确保大模型返回的结果是一个合法的 JSON 字符串，并且包含以下两个必需属性：
-> 1. `is_relevant`：表示内容是否相关，值为 1 或 0
-> 2. `analytical_briefing`：分析简报内容，仅在 `is_relevant` 为 1 时返回
+> ⚠️ **重要提示**：
+> 1. 在配置 prompt 时，必须确保大模型返回的结果是一个合法的 JSON 字符串，并且包含以下两个必需属性：
+>    - `is_relevant`：表示内容是否相关，值为 1 或 0
+>    - `analytical_briefing`：分析简报内容，仅在 `is_relevant` 为 1 时返回
+> 2. 在配置企业微信机器人 ID 时，需要使用 `$` 前缀来引用环境变量，例如：`$WECOM_TRUMP_ROBOT_ID`
 >
 > 如果返回的 JSON 格式不正确或缺少必需属性，程序将无法正常处理分析结果。
 
@@ -149,6 +152,89 @@ social_networks:
 - `WECHAT_ROBOT_CHATROOM_ID`: 个人微信群聊 ID，也可以为好友 ID
 - `DEBUG`: 调试模式开关，设置为 1 时启用调试模式
 
+## 配置说明
+
+### 环境变量
+
+环境变量支持两种引用格式：
+- `${VAR}` 格式：例如 `${WECOM_TRUMP_ROBOT_ID}`
+- `$VAR` 格式：例如 `$WECOM_TRUMP_ROBOT_ID`
+
+这两种格式可以在 YAML 配置文件中的任何值中使用，包括但不限于：
+- 企业微信机器人 ID
+- 社交媒体账号 ID
+- API 密钥
+- 其他配置项
+
+系统会自动递归处理所有配置项中的环境变量，将其替换为对应的环境变量值。如果环境变量不存在，将替换为空字符串。
+
+例如，以下配置都是合法的：
+```yaml
+social_networks:
+  - type: truthsocial
+    socialNetworkId: $TRUTH_SOCIAL_ID
+    apiKey: ${API_KEY}
+    weComRobotId: $WECOM_ROBOT_ID
+    customField: "前缀_${CUSTOM_VAR}_后缀"
+```
+
+### 监控账号配置
+
+创建 `config/social-networks.yml` 文件，配置需要监控的社交媒体账号：
+```yaml
+social_networks:
+  - type: truthsocial
+    socialNetworkId: realDonaldTrump
+    prompt: >-
+      你现在是一名财经专家，请对以下美国总统的发言进行分析，并给按我指定的格式返回分析结果。
+
+      这是你需要分析的内容：{content}
+
+      这是输出格式的说明：
+      {
+          "is_relevant": "是否与财经相关，且与美股市场或美债市场或科技股或半导体股或中国股票市场或香港股票市场或人民币兑美元汇率或中美关系相关。如果相关就返回1，如果不相关就返回0。只需要返回1或0这两个值之一即可",
+          "analytical_briefing": "分析简报"
+      }
+
+      其中analytical_briefing的值是一个字符串，它是针对内容所做的分析简报，仅在is_relevant为1时会返回这个值。
+
+      analytical_briefing的内容是markdown格式的，它需要符合下面的规范
+
+      ```markdown
+      原始正文，仅当需要分析的内容为英文时，这部分内容才会以markdown中引用的格式返回，否则这部分的内容为原始的正文
+
+      翻译后的内容，仅当需要分析的内容为英文时，才会有这部分的内容。
+
+      ## Brief Analysis
+
+      分析结果。这部分会展示一个列表，列表中分别包含美股市场、美债市场、科技股、半导体股、中国股票市场、香港股票市场、人民币兑美元汇率、中美关系这8个选项。
+      每个选项的值为分别为📈利多和📉利空。如果分析内容对于该选项没有影响，就不要针对这个选项返回任何内容。
+
+      ## Summarize
+
+      这部分需要用非常简明扼要的文字对分析结果进行总结，以及解释为什么在上面针对不同选项会得出不同的结论。
+      ```
+    weComRobotId: $WECOM_TRUMP_ROBOT_ID
+    sendToWeChat: true
+  - type: twitter
+    socialNetworkId: 
+      - myfxtrader
+      - zaobaosg
+      - business
+      - HAOHONG_CFA
+    prompt: >-
+      你现在是一名财经专家，请对以下财经博主的发言进行分析，并给按我指定的格式返回分析结果。
+      # ... 其他配置与上面类似 ...
+    weComRobotId: $WECOM_FINANCE_ROBOT_ID
+```
+
+> ⚠️ **重要提示**：
+> 1. 在配置 prompt 时，必须确保大模型返回的结果是一个合法的 JSON 字符串，并且包含以下两个必需属性：
+>    - `is_relevant`：表示内容是否相关，值为 1 或 0
+>    - `analytical_briefing`：分析简报内容，仅在 `is_relevant` 为 1 时返回
+> 2. 在配置企业微信机器人 ID 时，需要使用 `$` 前缀来引用环境变量，例如：`$WECOM_TRUMP_ROBOT_ID`
+>
+> 如果返回的 JSON 格式不正确或缺少必需属性，程序将无法正常处理分析结果。
 
 ## 使用方法
 
