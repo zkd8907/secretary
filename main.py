@@ -11,6 +11,12 @@ import os
 
 load_dotenv()
 
+# 从环境变量获取最大重试次数，如果不存在或不是整数则使用默认值3
+try:
+    LLM_PROCESS_MAX_RETRIED = int(os.getenv("LLM_PROCESS_MAX_RETRIED", "3"))
+except (ValueError, TypeError):
+    LLM_PROCESS_MAX_RETRIED = 3
+
 
 def load_config():
     config_path = 'config/social-networks.yml'
@@ -66,7 +72,8 @@ def main():
             rawData = ''
 
             # 在某些情况下，LLM会返回一些非法的json字符串，所以这里需要循环尝试，直到解析成功为止
-            while format_result is None:
+            retry_count = 0
+            while format_result is None and retry_count < LLM_PROCESS_MAX_RETRIED:
                 if len(rawData) > 0:
                     prompt += """
 你前次基于上面的内容提供给我的json是{rawData}，然而这个json内容有语法错误，无法在python中被解析。针对这个问题重新检查我的要求，按指定要求和格式回答。
@@ -78,6 +85,12 @@ def main():
                     print(f"解析 JSON 时出错: {e}")
                     print(f"翻译内容: {rawData}")
                     format_result = None
+                    retry_count += 1
+
+            if format_result is None:
+                print(
+                    f"在 {account['type']}: {account['socialNetworkId']} 上处理内容时，LLM返回的JSON格式始终无法解析，已达到最大重试次数 {LLM_PROCESS_MAX_RETRIED}")
+                continue
 
             post_time = post.get_local_time()
 

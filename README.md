@@ -74,6 +74,9 @@ WECHAT_ROBOT_CHATROOM_ID=your_wechat_robot_chatroom_id
 
 # 调试模式（可选）
 DEBUG=1
+
+# LLM 处理失败时的最大重试次数，默认为 3
+LLM_PROCESS_MAX_RETRIED=3
 ```
 
 4. 配置监控账号：
@@ -138,6 +141,7 @@ social_networks:
 - `TWITTER_SESSION`: 之前登录过的 Twitter 平台的登录票据
 - `HUNYUAN_API_KEY`: 腾讯混元大模型的 API 密钥
 - `HUNYUAN_API_BASE`: 腾讯混元大模型的 API 基础地址
+- `LLM_PROCESS_MAX_RETRIED`: LLM 处理失败时的最大重试次数，默认为 3
 - `WECOM_*_ROBOT_ID`: 企业微信机器人的 ID，可以配置多个
 - `WECHAT_ROBOT_IP`: 个人微信部署服务器 IP/域名
 - `WECHAT_ROBOT_TOKEN`: 个人微信 Gewechat 会话 Token
@@ -179,6 +183,8 @@ python main.py
 - 每个监控账号可以配置不同的分析提示词和推送目标
 - 提示词配置决定了分析的主题和维度，可以根据需求灵活调整
 - Twitter登录后会生成会话文件（*.tw_session），该文件已被添加到.gitignore中，不会被提交到代码仓库
+- 当 LLM 返回的 JSON 格式无法解析时，系统会自动重试，重试次数由环境变量 `LLM_PROCESS_MAX_RETRIED` 控制，默认为 3 次
+- 如果重试次数用完仍然无法解析 JSON，系统会跳过当前内容的处理并继续处理下一条内容
 
 ## 许可证
 
