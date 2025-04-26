@@ -10,13 +10,19 @@ Secretary 是一个自动化的社交媒体分析工具，专门用于监控和�
 - 可配置多个监控账号，每个账号可以设置不同的分析提示词
 - 支持自定义分析主题和维度，通过配置提示词实现灵活的分析策略
 - 使用 AI 进行内容翻译和分析
+- 灵活的消息推送支持：
+  - 支持企业微信多机器人配置（可同时推送到财经、政治、科技等不同主题的群组）
+  - 支持基于 [Gewechat](https://github.com/Devo919/Gewechat) 的个人微信推送
+  - 支持基于 [Lagrange](https://github.com/LagrangeDev/Lagrange.Core) 的 个人 QQ 群消息推送
+  - 可通过环境变量灵活开启/关闭不同的推送通道
+- 使用 AI 进行内容翻译和分析，支持多种 LLM 模型：
+  - 支持配置任意符合 OpenAI 接口标准的模型
+  - 可自定义模型参数（API 地址、密钥等）
 - 支持多维度分析，例如：
   - 财经分析（市场影响、投资机会等）
   - 政治分析（政策影响、国际关系等）
   - 科技分析（技术趋势、创新影响等）
   - 其他自定义分析维度
-- 支持多个企业微信机器人，可以为不同账号配置不同的推送目标
-- 支持推送消息到基于 [Gewechat](https://github.com/Devo919/Gewechat) 部署的个人微信号服务器
 - 支持调试模式，方便开发和测试
 
 ## 安装说明
@@ -58,19 +64,27 @@ TRUTHSOCIAL_TOKEN=your_truthsocial_token
 TWITTER_USERNAME=your_twitter_username
 TWITTER_PASSWORD=your_twitter_password
 
-# 腾讯混元大模型配置
-HUNYUAN_API_KEY=your_hunyuan_api_key
-HUNYUAN_API_BASE=https://api.hunyuan.cloud.tencent.com/v1
+# LLM API 配置
+LLM_API_MODEL=your_model_name
+LLM_API_KEY=your_api_key
+LLM_API_BASE=your_api_base_url
 
 # 企业微信机器人配置（可配置多个）
+ENABLE_WECOM_BOT=true
 WECOM_TRUMP_ROBOT_ID=your_wecom_robot_id_1
 WECOM_FINANCE_ROBOT_ID=your_wecom_robot_id_2
 
 # 个人微信号配置
+ENABLE_WECHAT_BOT=true
 WECHAT_ROBOT_IP=your_wechat_robot_ip
 WECHAT_ROBOT_TOKEN=your_wechat_robot_token
 WECHAT_ROBOT_APP_ID=your_wechat_robot_app_id
 WECHAT_ROBOT_CHATROOM_ID=your_wechat_robot_chatroom_id
+
+# QQ 群机器人配置
+ENABLE_QQ_BOT=true
+QQ_BOT_URL=your_qq_bot_url
+QQ_BOT_GROUP_ID=your_qq_group_id
 
 # 调试模式（可选）
 DEBUG=1
@@ -142,14 +156,20 @@ social_networks:
 - `TWITTER_USERNAME`: Twitter 平台的用户名
 - `TWITTER_PASSWORD`: Twitter 平台的密码
 - `TWITTER_SESSION`: 之前登录过的 Twitter 平台的登录票据
-- `HUNYUAN_API_KEY`: 腾讯混元大模型的 API 密钥
-- `HUNYUAN_API_BASE`: 腾讯混元大模型的 API 基础地址
+- `LLM_API_MODEL`: 使用的 LLM 模型名称
+- `LLM_API_KEY`: LLM API 密钥
+- `LLM_API_BASE`: LLM API 基础地址
 - `LLM_PROCESS_MAX_RETRIED`: LLM 处理失败时的最大重试次数，默认为 3
-- `WECOM_*_ROBOT_ID`: 企业微信机器人的 ID，可以配置多个
+- `ENABLE_WECOM_BOT`: 是否启用企业微信机器人，值为 true/false
+- `WECOM_*_ROBOT_ID`: 企业微信机器人的 ID，可以配置多个（如 WECOM_TRUMP_ROBOT_ID, WECOM_FINANCE_ROBOT_ID 等）
+- `ENABLE_WECHAT_BOT`: 是否启用个人微信机器人，值为 true/false
 - `WECHAT_ROBOT_IP`: 个人微信部署服务器 IP/域名
 - `WECHAT_ROBOT_TOKEN`: 个人微信 Gewechat 会话 Token
 - `WECHAT_ROBOT_APP_ID`: 个人微信部署设备唯一 ID
 - `WECHAT_ROBOT_CHATROOM_ID`: 个人微信群聊 ID，也可以为好友 ID
+- `ENABLE_QQ_BOT`: 是否启用QQ机器人，值为 true/false
+- `QQ_BOT_URL`: QQ机器人 HTTP 服务器地址
+- `QQ_BOT_GROUP_ID`: QQ群号
 - `DEBUG`: 调试模式开关，设置为 1 时启用调试模式
 
 ## 配置说明

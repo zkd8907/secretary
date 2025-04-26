@@ -7,9 +7,9 @@ import os
 load_dotenv()
 
 
-def get_hunyuan_response(prompt: str) -> str:
+def get_llm_response(prompt: str) -> str:
     """
-    使用 langchain-openai 调用 hunyuan-turbos-latest 模型获取响应
+    使用 langchain-openai 调用模型获取响应
 
     Args:
         prompt (str): 输入的提示词
@@ -19,9 +19,9 @@ def get_hunyuan_response(prompt: str) -> str:
     """
     # 初始化 ChatOpenAI 客户端
     chat = ChatOpenAI(
-        model="hunyuan-turbos-latest",
-        openai_api_base=os.getenv("HUNYUAN_API_BASE"),
-        openai_api_key=os.getenv("HUNYUAN_API_KEY")
+        model=os.getenv("LLM_API_MODEL"),
+        openai_api_base=os.getenv("LLM_API_BASE"),
+        openai_api_key=os.getenv("LLM_API_KEY")
     )
 
     # 创建消息

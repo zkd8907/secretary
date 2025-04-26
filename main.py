@@ -1,7 +1,7 @@
 import json
 from modules.socialmedia.truthsocial import fetch as fetchTruthsocial
 from modules.socialmedia.twitter import fetch as fetchTwitter
-from modules.langchain.hunyuan import get_hunyuan_response
+from modules.langchain.llm import get_llm_response
 from modules.bots.wecom import send_markdown_msg
 from modules.bots.wechat import send_wechat_msg
 from utils.yaml import load_config_with_env
@@ -64,7 +64,7 @@ def main():
                     prompt += """
 你前次基于上面的内容提供给我的json是{rawData}，然而这个json内容有语法错误，无法在python中被解析。针对这个问题重新检查我的要求，按指定要求和格式回答。
 """
-                rawData = get_hunyuan_response(prompt).replace('\n', '\\n')
+                rawData = get_llm_response(prompt).replace('\n', '\\n')
                 try:
                     format_result = json.loads(rawData)
                 except Exception as e:
@@ -93,18 +93,38 @@ def main():
 
 origin: [{post.url}]({post.url})"""
 
-            send_markdown_msg(
-                markdown_msg,
-                account['weComRobotId']
-            )
+            # Send to WeWork bots if enabled
+            if os.getenv("ENABLE_WECOM_BOT", "false").lower() == "true":
+                robot_ids = []
+                if 'weComRobotId' in account:
+                    robot_ids.append(account['weComRobotId'])
+                else:
+                    # Use all configured robot IDs
+                    for key in ["WECOM_TRUMP_ROBOT_ID", "WECOM_FINANCE_ROBOT_ID", "WECOM_AI_ROBOT_ID"]:
+                        robot_id = os.getenv(key)
+                        if robot_id:
+                            robot_ids.append(robot_id)
+                
+                for robot_id in robot_ids:
+                    send_markdown_msg(markdown_msg, robot_id)
 
-            if ('sendToWeChat' in account and account['sendToWeChat'] == True):
+            # Send to WeChat bot if enabled
+            if os.getenv("ENABLE_WECHAT_BOT", "false").lower() == "true":
                 send_wechat_msg(
                     markdown_msg,
-                    os.getenv("WECHAT_ROBOT_IP", ''),
-                    os.getenv("WECHAT_ROBOT_TOKEN", ''),
-                    os.getenv("WECHAT_ROBOT_APP_ID", ''),
-                    os.getenv("WECHAT_ROBOT_CHATROOM_ID", '')
+                    os.getenv("WECHAT_ROBOT_IP", ""),
+                    os.getenv("WECHAT_ROBOT_TOKEN", ""),
+                    os.getenv("WECHAT_ROBOT_APP_ID", ""),
+                    os.getenv("WECHAT_ROBOT_CHATROOM_ID", "")
+                )
+            
+            # Send to QQ bot if enabled
+            if os.getenv("ENABLE_QQ_BOT", "false").lower() == "true":
+                from modules.bots.qqchat import send_qqgroup_msg
+                send_qqgroup_msg(
+                    markdown_msg,
+                    os.getenv("QQ_BOT_URL", ""),
+                    os.getenv("QQ_BOT_GROUP_ID", "")
                 )
 
 
