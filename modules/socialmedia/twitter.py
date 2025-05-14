@@ -1,6 +1,6 @@
 import os
 from tweety import Twitter
-from utils.redisClient import redis_client
+from utils.redisclient import redis_client
 from modules.socialmedia.post import Post
 from dotenv import load_dotenv
 

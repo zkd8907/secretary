@@ -2,7 +2,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 from truthbrush.api import Api
 from modules.socialmedia.post import Post
-from utils.redisClient import redis_client
+from utils.redisclient import redis_client
 
 api = Api()
 

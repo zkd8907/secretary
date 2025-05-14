@@ -1,0 +1,12 @@
+{
+    "name": "Secretary Dev Container",
+    "image": "mcr.microsoft.com/devcontainers/python:3.11",
+    "postCreateCommand": "curl -LsSf https://astral.sh/uv/install.sh | sh && uv sync",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.pythonPath": "./.venv/bin/python"
+            }
+        }
+    }
+}
