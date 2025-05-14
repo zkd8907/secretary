@@ -175,3 +175,4 @@ cython_debug/
 
 
 *.tw_session
+.history/
