@@ -48,6 +48,17 @@ class Post:
 
         return self.post_on.astimezone(local_tz)
 
+    def get_dict(self) -> dict:
+        """获取字典格式的帖子信息"""
+        return {
+            "id": self.id,
+            "post_time": self.get_local_time().strftime("%Y-%m-%d %H:%M:%S"),
+            "content": self.content,
+            "post_url": self.url,
+            "poster_name": self.poster_name,
+            "poster_url": self.poster_url
+        }
+
     def __str__(self) -> str:
         return f"Post(id={self.id}, post_on={self.post_on}, content={self.content}, url={self.url}, poster_name={self.poster_name}, poster_url={self.poster_url})"
 

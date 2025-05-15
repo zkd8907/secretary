@@ -1,5 +1,5 @@
 {
-    "search.exclude": {
-        "*.lock": true
-    },
+  "search.exclude": {
+    "*.lock": true
+  },
 }

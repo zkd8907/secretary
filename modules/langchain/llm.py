@@ -28,9 +28,8 @@ def get_llm_response(prompt: str) -> str:
     messages = [
         SystemMessage(
             content="""
-你接下来回答的所有内容都只能是符合我要求的json字符串同。
-字符串中如果有一些特殊的字符需要做好转义，确保最终这个json字符串可以在python中被正确解析。
-在最终的回答中除了json字符串本身，不需要其它额外的信息，也不要在json内容前后额外增加markdown的三个点转义。
+你接下来回答需要严格按照用户要求输出。如果用户要求只返回markdown格式的内容，你就只返回markdown格式的内容，不要添加任何其他的文字。
+如果需要分析的内容不符合用户的要求，就返空字符串EMPTY，除此之外不允许返回其它内容。
 """),
         HumanMessage(content=prompt)
     ]
