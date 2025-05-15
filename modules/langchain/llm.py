@@ -3,28 +3,26 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from dotenv import load_dotenv
 import os
 
-# 加载环境变量
 load_dotenv()
 
 
 def get_llm_response(prompt: str) -> str:
     """
-    使用 langchain-openai 调用模型获取响应
+    Get response from the model using langchain-openai
 
     Args:
-        prompt (str): 输入的提示词
+        prompt (str): Input prompt
 
     Returns:
-        str: 模型的完整响应文本
+        str: Complete response text from the model
     """
-    # 初始化 ChatOpenAI 客户端
+
     chat = ChatOpenAI(
         model=os.getenv("LLM_API_MODEL"),
         openai_api_base=os.getenv("LLM_API_BASE"),
         openai_api_key=os.getenv("LLM_API_KEY")
     )
 
-    # 创建消息
     messages = [
         SystemMessage(
             content="""
@@ -34,7 +32,6 @@ def get_llm_response(prompt: str) -> str:
         HumanMessage(content=prompt)
     ]
 
-    # 获取响应
     response = chat.invoke(messages)
 
     return response.content

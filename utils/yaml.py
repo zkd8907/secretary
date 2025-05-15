@@ -1,4 +1,3 @@
-
 import os
 import re
 import yaml
@@ -6,21 +5,21 @@ import yaml
 
 def replace_env_vars(object):
     """
-    替换字符串中的环境变量
+    Replace environment variables in strings
 
-    支持替换格式为 `${VAR}` 或 `$VAR` 的环境变量，其中 `VAR` 必须由大写字母、数字或下划线组成。
-    如果环境变量不存在，则会替换为空字符串。
-    :param value: 字符串、字典或列表
-    :return: 替换后的字符串、字典或列表
+    Supports replacing environment variables in the format `${VAR}` or `$VAR`, where `VAR` must consist of uppercase letters, numbers, or underscores.
+    If the environment variable does not exist, it will be replaced with an empty string.
+    :param value: String, dictionary, or list
+    :return: String, dictionary, or list with replaced values
     """
     if isinstance(object, str):
-        # 匹配 ${VAR} 或 $VAR 格式
+        # Match ${VAR} or $VAR format
         pattern = r'\$\{([^}]+)\}|\$([A-Z0-9_]+)'
 
         def replace(match):
-            # 获取匹配到的环境变量名
+            # Get matched environment variable name
             env_var = match.group(1) or match.group(2)
-            # 返回环境变量值,如不存在返回空字符串
+            # Return environment variable value, return empty string if not exists
             return os.getenv(env_var, '')
 
         return re.sub(pattern, replace, object)
@@ -33,16 +32,17 @@ def replace_env_vars(object):
 
 def load_config_with_env(file_path):
     """
-    加载配置文件并替换其中的环境变量
-    :param file_path: 配置文件路径
-    :return: 替换后的配置字典
+    Load configuration file and replace environment variables in it
+    :param file_path: Path to configuration file
+    :return: Configuration dictionary with replaced values
     """
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             config = yaml.safe_load(f)
-            # 递归处理所有值中的环境变量
+            # Recursively process all environment variables in values
             return replace_env_vars(config)
     except FileNotFoundError:
-        raise FileNotFoundError(f"配置文件 {file_path} 不存在")
+        raise FileNotFoundError(
+            f"Configuration file {file_path} does not exist")
     except yaml.YAMLError as e:
-        raise yaml.YAMLError(f"配置文件格式不正确: {e}")
+        raise yaml.YAMLError(f"Configuration file format is invalid: {e}")
