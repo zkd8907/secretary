@@ -1,5 +1,3 @@
-
-
 import re
 import requests
 from utils.translator import translate
@@ -7,22 +5,22 @@ from utils.translator import translate
 
 def replace_vars(object, variables: dict):
     """
-    替换字符串中的业务变量
+    Replace business variables in strings
 
-    支持替换格式为 `$var` 的环境变量，其中 `var` 必须由小写字母、数字或下划线组成。
-    如果环境变量不存在，则不会做任何替换操作
-    :param value: 字符串、字典或列表
-    :param variables: 变量字典
-    :return: 替换后的字符串、字典或列表
+    Supports replacing environment variables in the format `$var`, where `var` must consist of lowercase letters, numbers, or underscores.
+    If the environment variable does not exist, no replacement will be performed
+    :param value: String, dictionary, or list
+    :param variables: Dictionary of variables
+    :return: Replaced string, dictionary, or list
     """
     if isinstance(object, str):
-        # 匹配 ${VAR} 或 $VAR 格式
+        # Match ${VAR} or $VAR format
         pattern = r'\$\{([^}]+)\}|\$([a-z0-9_]+)'
 
         def replace(match):
-            # 获取匹配到的环境变量名
+            # Get matched environment variable name
             variables_name = match.group(1) or match.group(2)
-            # 返回环境变量值,如不存在返回空字符串
+            # Return environment variable value, return empty string if not exists
             return variables.get(variables_name, match.group(0)).replace('\n', '\\n')
 
         return re.sub(pattern, replace, object)

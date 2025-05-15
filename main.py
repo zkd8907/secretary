@@ -14,54 +14,49 @@ load_dotenv()
 def main():
     config = load_config_with_env('config/social-networks.yml')
 
-    # 处理socialNetworkId为数组的情况
-    new_social_networks = []
-    for account in config['social_networks']:
-        if isinstance(account['socialNetworkId'], list):
-            # 如果socialNetworkId是数组,为每个ID创建一个新的配置
-            for social_id in account['socialNetworkId']:
+    social_networks_list = []
+    for social_network in config['social_networks']:
+        if isinstance(social_network['socialNetworkId'], list):
+            # if socialNetworkId is a list, create a new config for each elements in socialNetworkId
+            for social_id in social_network['socialNetworkId']:
                 if len(social_id) == 0:
                     continue
 
-                new_account = account.copy()
+                new_account = social_network.copy()
                 new_account['socialNetworkId'] = social_id
-                new_social_networks.append(new_account)
+                social_networks_list.append(new_account)
         else:
-            # 如果不是数组直接添加原配置
-            new_social_networks.append(account)
+            # If not a list, add the original config directly
+            social_networks_list.append(social_network)
 
-    # 用新的配置替换原配置
-    config['social_networks'] = new_social_networks
-
-    for account in config['social_networks']:
+    for social_network in social_networks_list:
         posts = []
-        if account['type'] == 'truthsocial':
-            posts = fetchTruthsocial(account['socialNetworkId'])
-        if account['type'] == 'twitter':
-            posts = fetchTwitter(account['socialNetworkId'])
+        if social_network['type'] == 'truthsocial':
+            posts = fetchTruthsocial(social_network['socialNetworkId'])
+        if social_network['type'] == 'twitter':
+            posts = fetchTwitter(social_network['socialNetworkId'])
 
         if len(posts) == 0:
             print(
-                f"在 {account['type']}: {account['socialNetworkId']} 上未发现有更新的内容")
+                f"No new post found on {social_network['type']}: {social_network['socialNetworkId']}")
             continue
 
         for post in posts:
             messenger_variables = post.get_dict()
-            prompt = re.sub(r'\$(\w+)', r'{\1}', account['prompt'])
+            prompt = re.sub(r'\$(\w+)', r'{\1}', social_network['prompt'])
             prompt = prompt.format(**messenger_variables)
 
             ai_result = get_llm_response(prompt)
 
             if ai_result == 'EMPTY':
                 print(
-                    f"在 {account['type']}: {account['socialNetworkId']} 上发现有更新的内容，但内容与需要关注的主题无关: {post_dict['content']}")
+                    f"New post found on {social_network['type']}: {social_network['socialNetworkId']}, but it is not related to the topic of interest: {messenger_variables['content']}")
                 continue
 
             messenger_variables['ai_result'] = ai_result
 
-            if 'messengers' in account and isinstance(account['messengers'], list):
-                for messenger in account['messengers']:
-                    # 发送消息
+            if 'messengers' in social_network and isinstance(social_network['messengers'], list):
+                for messenger in social_network['messengers']:
                     send(messenger, messenger_variables)
 
 
