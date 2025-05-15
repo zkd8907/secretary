@@ -26,6 +26,11 @@ def fetch(user_id: str) -> list[Post]:
     else:
         cursor = str(cursor, encoding='utf-8')
 
+    if os.getenv('DEBUG') == 'true':
+        print(
+            f"Fetching Twitter posts for user: {user_id} under debug mode, cursor will be set to empty")
+        cursor = ''
+
     try:
         posts = app.get_tweets(user_id, cursor=cursor)
     except Exception as e:
@@ -58,7 +63,11 @@ def fetch(user_id: str) -> list[Post]:
             noneEmptyPosts.append(Post(post.id, post.created_on, post.text,
                                   post.url, post.author.name, post.author.profile_url))
 
-    redis_client.set(f"twitter:{user_id}:last_post_id", posts.cursor_top)
+    if os.getenv('DEBUG') == 'true':
+        print(
+            f"Fetching Twitter posts for user: {user_id} under debug mode, cursor will be updated")
+    else:
+        redis_client.set(f"twitter:{user_id}:last_post_id", posts.cursor_top)
 
     return noneEmptyPosts
 

@@ -6,6 +6,8 @@ from utils.redisclient import redis_client
 
 api = Api()
 
+print(f"TruthSocial API initialized, token: {api.auth_id}")
+
 
 def fetch(user_id: str) -> list[Post]:
     last_post_id = redis_client.get(f"truthsocial:{user_id}:last_post_id")
