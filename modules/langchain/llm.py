@@ -25,10 +25,7 @@ def get_llm_response(prompt: str) -> str:
 
     messages = [
         SystemMessage(
-            content="""
-你接下来回答需要严格按照用户要求输出。如果用户要求只返回markdown格式的内容，你就只返回markdown格式的内容，不要添加任何其他的文字。
-如果需要分析的内容不符合用户的要求，就返空字符串EMPTY，除此之外不允许返回其它内容。
-"""),
+            content="""你接下来回答需要严格按照用户要求输出。如果需要分析的内容不符合用户的要求，就返空字符串EMPTY，除此之外不允许返回其它内容。"""),
         HumanMessage(content=prompt)
     ]
 
