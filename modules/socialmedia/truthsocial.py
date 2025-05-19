@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from bs4 import BeautifulSoup
 from truthbrush.api import Api
@@ -16,6 +17,11 @@ def fetch(user_id: str) -> list[Post]:
     else:
         last_post_id = str(last_post_id, encoding='utf-8')
 
+    if os.getenv('DEBUG') == 'true':
+        print(
+            f"Fetching TruthSocial posts for user: {user_id} under debug mode, last_post_id will be set to 114344562778183288")
+        last_post_id = '114344562778183288'
+
     posts = list(api.pull_statuses(username=user_id, since_id=last_post_id))
 
     noneEmptyPosts = []
@@ -32,7 +38,11 @@ def fetch(user_id: str) -> list[Post]:
         if post['id'] > last_post_id:
             last_post_id = post['id']
 
-    redis_client.set(f"truthsocial:{user_id}:last_post_id", last_post_id)
+    if os.getenv('DEBUG') == 'true':
+        print(
+            f"Fetching TruthSocial posts for user: {user_id} under debug mode, last_post_id will be updated")
+    else:
+        redis_client.set(f"truthsocial:{user_id}:last_post_id", last_post_id)
 
     return noneEmptyPosts
 
