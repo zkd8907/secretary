@@ -6,7 +6,7 @@ social_networks:
 
       这是你需要分析的内容：$content
 
-      如果需要分析的内容与财经、美股、中美关系、美债市场、科技股或半导体股有关，就按下面的markdown格式输出内容。
+      如果需要分析的内容与财经、美股、中美关系、美债市场、科技股或半导体股有关，就按下面的格式输出内容。
 
       ## Brief Analysis
 
@@ -25,15 +25,7 @@ social_networks:
           {
               "msgtype": "markdown",
               "markdown": {
-                  "content": "# [$poster_name]($poster_url) $post_time
-
-          > $content
-
-          $translation:zh-cn
-
-          $ai_result
-
-          Origin: [$post_url]($post_url)"
+                  "content": "# [$poster_name]($poster_url) $post_time\n> $content\n\n$translation:zh-cn\n\n$ai_result\n\nOrigin: [$post_url]($post_url)"
               }
           }
       - url: $PRIVATE_BARK_URL
