@@ -176,3 +176,6 @@ cython_debug/
 
 *.tw_session
 .history/
+
+config/*.yml
+!config/social-networks.example.yml
