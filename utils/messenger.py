@@ -32,10 +32,9 @@ def replace_vars(object, variables: dict):
 
 
 def send(request_params: dict, variables: dict):
-    request_params = replace_vars(request_params, variables)
     if 'body' in request_params:
-        request_params['body'] = translate(
-            request_params['body'], variables['content'])
+      request_params['body'] = translate(request_params['body'], variables['content'])
+    request_params = replace_vars(request_params, variables)
 
     print(f"send request: {request_params}")
 
