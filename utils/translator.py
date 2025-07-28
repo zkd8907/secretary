@@ -11,8 +11,14 @@ def translate(full_body, post_content):
         lang_code = match.group(1)
         if lang_code in LANGCODES.values():
             # Call the async function synchronously
-            translation = asyncio.run(
-                translate_sync(post_content, lang_code))
+            try:
+                translation = asyncio.run(
+                    translate_sync(post_content, lang_code))
+            except Exception as e:
+                print(f"Translation failed: {e}")
+                print(
+                    f"Original text: {post_content}, language code: {lang_code}")
+                return "<translation failed>"
             return translation.replace('\n', '\\n')
         return match.group(0)
 
