@@ -82,6 +82,10 @@ PRIVATE_BARK_URL=your_bark_push_url
 
 # Debug mode (optional)
 DEBUG=true
+
+# Scheduler configuration (optional)
+SCHEDULE_INTERVAL_MINUTES=5
+RUN_ON_START=false
 ```
 
 ### Account Monitoring Configuration
@@ -188,7 +192,20 @@ social_networks:
 ## Usage
 
 1. Ensure environment variables and monitoring accounts are properly configured
-2. Run the main program:
+
+2. **Scheduled execution (recommended)**:
+```bash
+# Run with built-in scheduler (default 5-minute intervals)
+python scheduler.py
+
+# Or with custom interval (10 minutes)
+SCHEDULE_INTERVAL_MINUTES=10 python scheduler.py
+
+# Or using Docker
+docker run -e SCHEDULE_INTERVAL_MINUTES=10 your-image
+```
+
+3. **Single execution**:
 ```bash
 python main.py
 ```
@@ -199,6 +216,11 @@ The program will automatically:
 - Perform AI analysis and translation based on each account's configured prompts
 - Generate analysis reports
 - Deliver analysis results through configured WeChat Work bots and personal WeChat accounts
+
+### Scheduler Configuration
+
+- `SCHEDULE_INTERVAL_MINUTES`: Execution interval in minutes (default: 5)
+- `RUN_ON_START`: Whether to run immediately on startup (default: false)
 
 ## Output Format
 

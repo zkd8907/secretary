@@ -82,6 +82,10 @@ PRIVATE_BARK_URL=your_bark_push_url
 
 # 调试模式（可选）
 DEBUG=true
+
+# 调度器配置（可选）
+SCHEDULE_INTERVAL_MINUTES=5
+RUN_ON_START=false
 ```
 
 ### 监控账号配置
@@ -188,7 +192,20 @@ social_networks:
 ## 使用方法
 
 1. 确保已正确配置环境变量和监控账号
-2. 运行主程序：
+
+2. **定时执行（推荐）**：
+```bash
+# 使用内置调度器运行（默认5分钟间隔）
+python scheduler.py
+
+# 或使用自定义间隔（10分钟）
+SCHEDULE_INTERVAL_MINUTES=10 python scheduler.py
+
+# 或使用Docker
+docker run -e SCHEDULE_INTERVAL_MINUTES=10 your-image
+```
+
+3. **单次执行**：
 ```bash
 python main.py
 ```
@@ -199,6 +216,11 @@ python main.py
 - 根据每个账号配置的提示词进行 AI 分析和翻译
 - 生成分析报告
 - 通过配置的企业微信机器人、个人微信推送分析结果
+
+### 调度器配置
+
+- `SCHEDULE_INTERVAL_MINUTES`: 执行间隔（分钟），默认为5分钟
+- `RUN_ON_START`: 是否在启动时立即运行一次，默认为false
 
 ## 输出格式
 

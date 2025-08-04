@@ -4,7 +4,6 @@ WORKDIR /app
 
 RUN apk add --no-cache \
     git \
-    dcron \
     curl \
     bash
 
@@ -13,8 +12,8 @@ RUN chmod +x /app/run.sh
 WORKDIR /app
 RUN uv sync
 
-RUN echo "*/5 * * * * /app/run.sh >> /var/log/cron.log 2>&1" > /etc/cron.d/secretary-cron
-RUN touch /var/log/cron.log
-RUN chmod 0644 /etc/cron.d/secretary-cron
+# Set default environment variables
+ENV SCHEDULE_INTERVAL_MINUTES=5
+ENV RUN_ON_START=false
 
-CMD crond -f -l 8 & tail -f /var/log/cron.log | tee /dev/stdout
+CMD ["uv", "run", "python", "scheduler.py"]
