@@ -21,24 +21,31 @@ social_networks:
         method: POST
         headers:
           Content-Type: application/json
-        body: >-
-          {
-              "msgtype": "markdown",
-              "markdown": {
-                  "content": "# [$poster_name]($poster_url) $post_time\n> $content\n\n$translation:zh-cn\n\n$ai_result\n\nOrigin: [$post_url]($post_url)"
-              }
-          }
+        body:
+          msgtype: markdown
+          markdown:
+            content: >-
+              # [$poster_name]($poster_url) $post_time
+              
+              > $content
+              
+              $translation:zh-cn
+              
+              $ai_result
+              
+              Origin: [$post_url]($post_url)
       - url: $PRIVATE_BARK_URL
         method: POST
         headers:
           Content-Type: application/json; charset=utf-8
-        body: >-
-          {
-              "title": "$poster_name: $content",
-              "group": "finance",
-              "url": "$post_url",
-              "body": "$ai_result"
-          }
+        body:
+          title: "$poster_name: $translation:zh-cn"
+          group: finance
+          url: $post_url
+          body: >-
+            $content
+            
+            $ai_result
   - type: twitter
     socialNetworkId:
       - myfxtrader
@@ -53,10 +60,11 @@ social_networks:
         method: POST
         headers:
           Content-Type: application/json; charset=utf-8
-        body: >-
-          {
-              "title": "$poster_name: $content",
-              "group": "finance",
-              "url": "$post_url",
-              "body": "$ai_result"
-          }
+        body:
+          title: "$poster_name: $translation:zh-cn"
+          group: finance
+          url: $post_url
+          body: >-
+            $content
+            
+            $ai_result

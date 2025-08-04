@@ -116,32 +116,19 @@ social_networks:
         method: POST
         headers:
           Content-Type: application/json
-        body: >-
-          {
-              "msgtype": "markdown",
-              "markdown": {
-                  "content": "# [$poster_name]($poster_url) $post_time
-
-          > $content
-
-          $translation:zh-cn
-
-          $ai_result
-
-          Origin: [$post_url]($post_url)"
-              }
-          }
+        body:
+          msgtype: markdown
+          markdown:
+            content: "# [$poster_name]($poster_url) $post_time\n\n> $content\n\n$translation:zh-cn\n\n$ai_result\n\nOrigin: [$post_url]($post_url)"
       - url: $PRIVATE_BARK_URL
         method: POST
         headers:
           Content-Type: application/json; charset=utf-8
-        body: >-
-          {
-              "title": "$poster_name: $content",
-              "group": "finance",
-              "url": "$post_url",
-              "body": "$ai_result"
-          }
+        body:
+          title: "$poster_name: $translation:zh-cn"
+          group: finance
+          url: "$post_url"
+          body: "$content\n$ai_result"
   - type: twitter
     socialNetworkId:
       - myfxtrader
@@ -166,13 +153,11 @@ social_networks:
         method: POST
         headers:
           Content-Type: application/json; charset=utf-8
-        body: >-
-          {
-              "title": "$poster_name: $content",
-              "group": "finance",
-              "url": "$post_url",
-              "body": "$ai_result"
-          }
+        body:
+          title: "$poster_name: $translation:zh-cn"
+          group: finance
+          url: "$post_url"
+          body: "$content\n$ai_result"
 ```
 
 > ⚠️ **Important Notes**:
@@ -186,8 +171,22 @@ social_networks:
 >    - `$translation:zh-cn`: Original content translated to target language, target language must comply with [ISO 639-1 standard](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes)
 >    - `$ai_result`: AI analysis result
 >    - `$post_url`: Original content URL
-> 3. Other parts of the configuration file can use environment variables with `$` prefix, e.g.: `$WECOM_TRUMP_ROBOT_URL`
-> 4. Environment variables only support names consisting of uppercase letters, numbers, and underscores, other characters are not supported
+> 3. The `body` field in messengers supports both YAML object format (as shown above) and JSON string format:
+>    ```yaml
+>    # YAML object format (recommended)
+>    body:
+>      title: "$poster_name: $translation:zh-cn"
+>      group: finance
+>    
+>    # JSON string format (also supported)
+>    body: >-
+>      {
+>        "title": "$poster_name: $translation:zh-cn",
+>        "group": "finance"
+>      }
+>    ```
+> 4. Other parts of the configuration file can use environment variables with `$` prefix, e.g.: `$WECOM_TRUMP_ROBOT_URL`
+> 5. Environment variables only support names consisting of uppercase letters, numbers, and underscores, other characters are not supported
 
 ## Usage
 
