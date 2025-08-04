@@ -1,9 +1,9 @@
 import os
 import re
-from modules.socialmedia.truthsocial import fetch as fetchTruthsocial
-from modules.socialmedia.twitter import fetch as fetchTwitter
+from modules.socialmedia.truthsocial import fetch as fetch_truthsocial
+from modules.socialmedia.twitter import fetch as fetch_twitter
 from modules.langchain.llm import get_llm_response
-from utils.messenger import send
+from utils.messenger import send_message
 from utils.yaml import load_config_with_env
 from dotenv import load_dotenv
 
@@ -14,50 +14,50 @@ load_dotenv()
 def main():
     config = load_config_with_env('config/social-networks.yml')
 
-    social_networks_list = []
-    for social_network in config['social_networks']:
-        if isinstance(social_network['socialNetworkId'], list):
-            # if socialNetworkId is a list, create a new config for each elements in socialNetworkId
-            for social_id in social_network['socialNetworkId']:
-                if len(social_id) == 0:
+    network_configs = []
+    for network_config in config['social_networks']:
+        if isinstance(network_config['socialNetworkId'], list):
+            # if socialNetworkId is a list, create a new config for each account ID
+            for account_id in network_config['socialNetworkId']:
+                if len(account_id) == 0:
                     continue
 
-                new_account = social_network.copy()
-                new_account['socialNetworkId'] = social_id
-                social_networks_list.append(new_account)
+                account_config = network_config.copy()
+                account_config['socialNetworkId'] = account_id
+                network_configs.append(account_config)
         else:
             # If not a list, add the original config directly
-            social_networks_list.append(social_network)
+            network_configs.append(network_config)
 
-    for social_network in social_networks_list:
+    for network_config in network_configs:
         posts = []
-        if social_network['type'] == 'truthsocial':
-            posts = fetchTruthsocial(social_network['socialNetworkId'])
-        if social_network['type'] == 'twitter':
-            posts = fetchTwitter(social_network['socialNetworkId'])
+        if network_config['type'] == 'truthsocial':
+            posts = fetch_truthsocial(network_config['socialNetworkId'])
+        if network_config['type'] == 'twitter':
+            posts = fetch_twitter(network_config['socialNetworkId'])
 
         if len(posts) == 0:
             print(
-                f"No new post found on {social_network['type']}: {social_network['socialNetworkId']}")
+                f"No new post found on {network_config['type']}: {network_config['socialNetworkId']}")
             continue
 
         for post in posts:
-            messenger_variables = post.get_dict()
-            prompt = re.sub(r'\$(\w+)', r'{\1}', social_network['prompt'])
-            prompt = prompt.format(**messenger_variables)
+            post_variables = post.get_dict()
+            prompt = re.sub(r'\$(\w+)', r'{\1}', network_config['prompt'])
+            prompt = prompt.format(**post_variables)
 
-            ai_result = get_llm_response(prompt)
+            llm_response = get_llm_response(prompt)
 
-            if ai_result == 'EMPTY':
+            if llm_response == 'EMPTY':
                 print(
-                    f"New post found on {social_network['type']}: {social_network['socialNetworkId']}, but it is not related to the topic of interest: {messenger_variables['content']}")
+                    f"New post found on {network_config['type']}: {network_config['socialNetworkId']}, but it is not related to the topic of interest: {post_variables['content']}")
                 continue
 
-            messenger_variables['ai_result'] = ai_result
+            post_variables['ai_result'] = llm_response
 
-            if 'messengers' in social_network and isinstance(social_network['messengers'], list):
-                for messenger in social_network['messengers']:
-                    send(messenger, messenger_variables)
+            if 'messengers' in network_config and isinstance(network_config['messengers'], list):
+                for messenger_config in network_config['messengers']:
+                    send_message(messenger_config, post_variables)
 
 
 if __name__ == "__main__":

@@ -116,32 +116,19 @@ social_networks:
         method: POST
         headers:
           Content-Type: application/json
-        body: >-
-          {
-              "msgtype": "markdown",
-              "markdown": {
-                  "content": "# [$poster_name]($poster_url) $post_time
-
-          > $content
-
-          $translation:zh-cn
-
-          $ai_result
-
-          Origin: [$post_url]($post_url)"
-              }
-          }
+        body:
+          msgtype: markdown
+          markdown:
+            content: "# [$poster_name]($poster_url) $post_time\n\n> $content\n\n$translation:zh-cn\n\n$ai_result\n\nOrigin: [$post_url]($post_url)"
       - url: $PRIVATE_BARK_URL
         method: POST
         headers:
           Content-Type: application/json; charset=utf-8
-        body: >-
-          {
-              "title": "$poster_name: $content",
-              "group": "finance",
-              "url": "$post_url",
-              "body": "$ai_result"
-          }
+        body:
+          title: "$poster_name: $translation:zh-cn"
+          group: finance
+          url: "$post_url"
+          body: "$content\n$ai_result"
   - type: twitter
     socialNetworkId:
       - myfxtrader
@@ -166,18 +153,16 @@ social_networks:
         method: POST
         headers:
           Content-Type: application/json; charset=utf-8
-        body: >-
-          {
-              "title": "$poster_name: $content",
-              "group": "finance",
-              "url": "$post_url",
-              "body": "$ai_result"
-          }
+        body:
+          title: "$poster_name: $translation:zh-cn"
+          group: finance
+          url: "$post_url"
+          body: "$content\n$ai_result"
 ```
 
 > ⚠️ **重要提示**：
 > 
-> 1. promptp 字段仅支持 `$content` 变量以及环境变量，不能使用其他内置变量
+> 1. prompt 字段仅支持 `$content` 变量以及环境变量，不能使用其他内置变量
 > 2. 在配置消息推送通道 messengers 时，可以使用以下内置变量：
 >    - `$poster_name`: 发布者名称
 >    - `$poster_url`: 发布者主页链接
@@ -186,8 +171,22 @@ social_networks:
 >    - `$translation:zh-cn`: 原始内容翻译为目标语言的内容，目标语言需要符合 [ISO 639-1 标准](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes)
 >    - `$ai_result`: AI 分析结果
 >    - `$post_url`: 原始内容链接
-> 3. 配置文件中其它部分的 value 都可以使用 `$` 前缀来引用环境变量，例如：`$WECOM_TRUMP_ROBOT_URL`
-> 4. 环境变量只支持任何由大写字母、数字和下划线组成的变量名，不能支持由其他字符构成的环境变量名
+> 3. messengers 中的 `body` 字段支持 YAML 对象格式（如上所示）和 JSON 字符串格式：
+>    ```yaml
+>    # YAML 对象格式（推荐）
+>    body:
+>      title: "$poster_name: $translation:zh-cn"
+>      group: finance
+>    
+>    # JSON 字符串格式（也支持）
+>    body: >-
+>      {
+>        "title": "$poster_name: $translation:zh-cn",
+>        "group": "finance"
+>      }
+>    ```
+> 4. 配置文件中其它部分的 value 都可以使用 `$` 前缀来引用环境变量，例如：`$WECOM_TRUMP_ROBOT_URL`
+> 5. 环境变量只支持任何由大写字母、数字和下划线组成的变量名，不能支持由其他字符构成的环境变量名
 
 ## 使用方法
 
